@@ -21,4 +21,12 @@ class BaseTest extends UnitTestCase
             extension_loaded('phalcon')
         );
     }
+
+    public function testRabbitMQConfig()
+    {
+        $config = di('configCenter')->get('rabbitMQ');
+        $this->assertEquals($config->host, env('RABBITMQ_HOST'));
+        $this->assertEquals($config->port, env('RABBITMQ_PORT'));
+        $this->assertEquals($config->pass, env('RABBITMQ_PASS'));
+    }
 }
