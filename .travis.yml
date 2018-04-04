@@ -1,7 +1,7 @@
 language: php
 
 dist: trusty
-sudo: false
+sudo: required
 
 addons:
   hosts:
@@ -23,8 +23,7 @@ git:
   depth: 1
 
 services:
-  - redis-server
-  - mongodb
+  - docker
 
 before_install:
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
@@ -47,6 +46,9 @@ install:
   - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/phalcon.ini
   # We use this file as our custom PHP config
   - phpenv config-add $TRAVIS_BUILD_DIR/tests/_ci/ci.ini
+  # 安装RabbitMQ
+  - docker pull rabbitmq:management
+  - docker run -d --name rabbitmq -p 5671:5671 -p 5672:5672 -p 4369:4369 -p 25672:25672 -p 15671:15671 -p 15672:15672 rabbitmq:management
   # 安装项目
   - composer self-update
   - cd $TRAVIS_BUILD_DIR
