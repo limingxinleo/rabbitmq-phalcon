@@ -278,6 +278,7 @@ return new Config(
                 'session' => App\Core\Services\Session::class,
                 'modelsManager' => App\Core\Services\ModelsManager::class,
                 'logger' => App\Core\Services\Logger::class,
+                'rabbitMQ' => App\Core\Services\RabbitMQ::class,
             ],
             'cli' => [
                 'dispatcher' => App\Core\Services\Cli\Dispatcher::class,
