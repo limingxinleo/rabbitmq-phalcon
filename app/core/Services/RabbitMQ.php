@@ -18,14 +18,13 @@ class RabbitMQ implements ServiceProviderInterface
     {
         $di->setShared('rabbitMQ', function () use ($di, $config) {
             $config = $di->getShared('configCenter')->get('rabbitmq');
-            $connection = new AMQPStreamConnection(
+            return new AMQPStreamConnection(
                 $config->host,
                 $config->port,
                 $config->user,
                 $config->pass,
                 $config->vhost
             );
-            return $connection->channel();
         });
     }
 }
