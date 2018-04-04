@@ -24,7 +24,7 @@ class BaseTest extends UnitTestCase
 
     public function testRabbitMQConfig()
     {
-        $config = di('configCenter')->get('rabbitMQ');
+        $config = di('configCenter')->get('rabbitmq');
         $this->assertEquals($config->host, env('RABBITMQ_HOST'));
         $this->assertEquals($config->port, env('RABBITMQ_PORT'));
         $this->assertEquals($config->pass, env('RABBITMQ_PASS'));
