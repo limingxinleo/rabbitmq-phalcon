@@ -23,6 +23,7 @@ git:
   depth: 1
 
 services:
+  - redis-server
   - docker
 
 before_install:
