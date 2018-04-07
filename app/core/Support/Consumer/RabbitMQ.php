@@ -12,6 +12,8 @@ use App\Common\Enums\ErrorCode;
 use App\Common\Exceptions\BizException;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use Phalcon\Logger\AdapterInterface;
+use Xin\Cli\Color;
 
 abstract class RabbitMQ
 {
@@ -24,6 +26,9 @@ abstract class RabbitMQ
     public $channel;
 
     public $exchangeType = 'direct';
+
+    /** @var AdapterInterface */
+    protected $logger;
 
     protected static $_instances = [];
 
@@ -65,13 +70,28 @@ abstract class RabbitMQ
         return static::$_instances[$key] = $client;
     }
 
+    public function setLogger(AdapterInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     public function basicConsume()
     {
         $this->channel->basic_consume($this->queue, $this->tag, false, false, false, false, function ($message) {
             try {
                 $data = json_decode($message->body, true);
+                $date = date('Y-m-d H:i:s');
+                $name = get_class();
+                echo Color::colorize("[{$date}] Processing: {$name}", Color::FG_GREEN) . PHP_EOL;
+                if (isset($this->logger) && $this->logger instanceof AdapterInterface) {
+                    $this->logger->info("[{$date}] Processing: {$name} {$message->body}");
+                }
                 $this->handle($data);
                 $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
+                echo Color::colorize("[{$date}] Processed: {$name}", Color::FG_GREEN) . PHP_EOL;
+                if (isset($this->logger) && $this->logger instanceof AdapterInterface) {
+                    $this->logger->info("[{$date}] Processed: {$name} {$message->body}");
+                }
             } catch (\Exception $ex) {
                 $logger = di('logger')->getLogger('rabbit-consumer');
                 $msg = $ex->getMessage() . ' code:' . $ex->getCode() . ' in ' . $ex->getFile() . ' line ' . $ex->getLine() . PHP_EOL . $ex->getTraceAsString();

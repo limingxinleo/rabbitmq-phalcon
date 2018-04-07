@@ -9,16 +9,15 @@
 namespace Tests\Units\Consumer;
 
 use App\Core\Support\Consumer\RabbitMQ;
-use App\Utils\Log;
 use App\Utils\Redis;
 
-class Test extends RabbitMQ
+class Test2 extends RabbitMQ
 {
     public $exchange = 'phalcon-exchange';
 
     public $queue = 'phalcon-queue';
 
-    public $tag = 'phalcon-consumer';
+    public $tag = 'phalcon-consumer2';
 
     public function handle(array $data)
     {
