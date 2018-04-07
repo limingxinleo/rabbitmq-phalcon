@@ -64,6 +64,7 @@ before_script:
   - php -S localhost:8080 -t public &> /dev/null &
   - php run queue &> /dev/null &
   - php tests/basic_consumer.php &> /dev/null &
+  - php tests/basic_consumer2.php &> /dev/null &
 
 script:
   - cd $TRAVIS_BUILD_DIR
