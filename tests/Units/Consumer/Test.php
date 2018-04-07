@@ -25,5 +25,7 @@ class Test extends RabbitMQ
         Redis::set('rabbit:consumer:success', $data['success']);
         Redis::set('rabbit:consumer:version', $data['data']['version']);
         Redis::set('rabbit:consumer:uniqid', $data['data']['uniqid']);
+
+        Redis::incr('rabbit:consumer:incr');
     }
 }

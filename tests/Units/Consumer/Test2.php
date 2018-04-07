@@ -15,14 +15,16 @@ class Test2 extends RabbitMQ
 {
     public $exchange = 'phalcon-exchange';
 
-    public $queue = 'phalcon-queue';
+    public $queue = 'phalcon-queue2';
 
-    public $tag = 'phalcon-consumer2';
+    public $tag = 'phalcon-consumer';
 
     public function handle(array $data)
     {
         Redis::set('rabbit:consumer:success', $data['success']);
         Redis::set('rabbit:consumer:version', $data['data']['version']);
         Redis::set('rabbit:consumer:uniqid', $data['data']['uniqid']);
+
+        Redis::incr('rabbit:consumer:incr');
     }
 }

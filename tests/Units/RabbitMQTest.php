@@ -21,6 +21,7 @@ class RabbitMQTest extends UnitTestCase
     {
         $publisher = Test::getInstance();
         $uniqid = uniqid();
+        Redis::del('rabbit:consumer:incr');
 
         $publisher->basicPublish([
             'success' => true,
@@ -35,5 +36,6 @@ class RabbitMQTest extends UnitTestCase
         $this->assertEquals(true, Redis::get('rabbit:consumer:success'));
         $this->assertEquals(di('config')->version, Redis::get('rabbit:consumer:version'));
         $this->assertEquals($uniqid, Redis::get('rabbit:consumer:uniqid'));
+        $this->assertEquals(2, Redis::get('rabbit:consumer:incr'));
     }
 }
